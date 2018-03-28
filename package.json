@@ -1,0 +1,28 @@
+{
+    "name": "senjou",
+    "version": "1.0.0",
+    "description": "Senjou is a general-purpose discord bot.",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc",
+        "dev": "ts-node ./src/bot.ts",
+        "start": "node ./dist/bot.js",
+        "prod": "npm run build && npm start"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/avuxo/senjou.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "closed",
+    "bugs": {
+        "url": "https://github.com/avuxo/senjou/issues"
+    },
+    "homepage": "https://github.com/avuxo/senjou#readme",
+    "dependencies": {
+        "discord.js": "^11.3.2",
+        "sqlite3": "^4.0.0"
+    }
+}
