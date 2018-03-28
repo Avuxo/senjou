@@ -1,7 +1,7 @@
 import * as discord from 'discord.js';
 import { Client } from 'discord.js';
 
-import DB from './db';
+import { DB } from './db';
 /*
   Senjou
   The main class of the bot
@@ -12,14 +12,15 @@ export class Senjou{
     private token: string;
     private prefix: string;
     private client: Client;
+    private database: DB;
     
     constructor(config){
         this.token = config.token;
         this.prefix = config.prefix;
 
+        this.database = new DB();
 
         this.client = new Client(); // init the discord client
-
         this.client.login(this.token); // login to the discord API
     }
 
