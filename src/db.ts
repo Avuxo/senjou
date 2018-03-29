@@ -16,7 +16,7 @@ export class DB{
     
     constructor(){
         // connect to the database
-        mongoose.connect('mongodb://localhost/senjou');
+        mongoose.connect('mongodb://localhost:27017');
 
         // create the user schema
         this.userSchema = new mongoose.Schema(
