@@ -1,8 +1,10 @@
 import * as discord from 'discord.js';
 import { Client } from 'discord.js';
+import * as glob from 'glob';
 
 import { DB } from './db';
 import { CommandHandler } from './commandhandler';
+
 /*
   Senjou
   The main class of the bot
@@ -22,24 +24,29 @@ export class Senjou{
 
         this.database = new DB();
 
-        this.client = new Client(); // init the discord client
+        /*this.client = new Client(); // init the discord client
         this.client.login(this.token); // login to the discord API
-
+        */
         this.commandHandler = new CommandHandler();
     }
 
     // load the commands from the modules
     private loadCommands(): void{
-        
+        glob('./commands/*.js', (err, files) => {
+            for(i in files){
+                let command = require(files[i]);
+                this.commandHandler.defCommand(command.label);
+            }
+        });
     }
     
     public start(): void{
         // start the bot
-        this.client.on("ready", () => {
+        /*this.client.on("ready", () => {
             // print startup time
             console.log("Bot started @ " + this.getTime());
         
-        });
+        });*/
     }
 
     // get the time & date at invocation

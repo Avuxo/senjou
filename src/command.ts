@@ -8,8 +8,8 @@ const predefinedCommands = ["desc"];
   Abstract class that handles the existing commands used by the bot
 */
 export class Command{
-    private label: string;
-    private func: (args) => string;
+    public label: string;
+    public func: (args) => string;
     private description: string;
     private cooldown: number;
     private needsArgs: boolean;
