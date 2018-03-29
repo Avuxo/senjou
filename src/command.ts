@@ -24,7 +24,7 @@ export class Command{
      */
     constructor(label, func, options){
         this.label = label;
-        this.generator = generator;
+        this.func = func;
         this.description = options.descriptions;
         this.cooldown = options.cooldown || 0;
         this.needsArgs = options.needsArgs;

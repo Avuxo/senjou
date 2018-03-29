@@ -24,29 +24,41 @@ export class Senjou{
 
         this.database = new DB();
 
-        /*this.client = new Client(); // init the discord client
+        this.client = new Client(); // init the discord client
         this.client.login(this.token); // login to the discord API
-        */
+        
         this.commandHandler = new CommandHandler();
+
+        this.loadCommands();
     }
 
     // load the commands from the modules
     private loadCommands(): void{
+        // find all javascript files in commands/
         glob('./commands/*.js', (err, files) => {
-            for(i in files){
-                let command = require(files[i]);
-                this.commandHandler.defCommand(command.label);
-            }
+            console.log("Loading " + files.length + " commands.");
+            if(err) { console.log(err); }
+            files.forEach( (file) => {
+                // dot is added because it's in the previous dir
+                // for the current script, but not the root dir.
+                // running npm run dev would put it from ./ instead of
+                // ./src
+                let command = require('.' + file);
+                this.commandHandler.defCommand(command.label,
+                                               command.func,
+                                               command.options);
+            });
+            console.log('loaded');
         });
     }
     
     public start(): void{
         // start the bot
-        /*this.client.on("ready", () => {
+        this.client.on("ready", () => {
             // print startup time
             console.log("Bot started @ " + this.getTime());
         
-        });*/
+        });
     }
 
     // get the time & date at invocation
