@@ -57,7 +57,21 @@ export class Senjou{
         this.client.on("ready", () => {
             // print startup time
             console.log("Bot started @ " + this.getTime());
+            // set the 'playing' status
+            this.client.user.setPresence({game: {name: 'with Ben Whom', type: 0}});
         
+        });
+
+        // message in view
+        this.client.on("message", (msg) => {
+            if(msg.content.startsWith(this.prefix)){
+                let command = msg.content.substr(1).split(" ");
+                let args = command.slice(1);
+
+                let response = this.commandHandler.execCommand(command[0], args);
+
+                msg.reply(response);
+            }
         });
     }
 
@@ -72,7 +86,6 @@ export class Senjou{
         return time + " " + day;
 
     }
-
 
 }
 

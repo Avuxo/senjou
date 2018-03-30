@@ -51,10 +51,9 @@ export class Command{
     }
     
     // execute the command
-    private execute(msg, args): any{
+    private execute(args): string{
         let result: string = this.func(args);
-
-        this.sendMessage()
+        return result;
     }
 
     // send a given message as a response

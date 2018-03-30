@@ -13,7 +13,8 @@ export class CommandHandler{
     constructor(){
         this.commands = {};
     }
-    
+
+    /* define a command */
     public defCommand(label, generator, options): void{
         if(this.commands[label]){
             throw new Error("Command " + label + " is already registered.");
@@ -22,4 +23,10 @@ export class CommandHandler{
         /* create the new command */
         this.commands[label] = new Command(label, generator, options);
     }
+
+    /* execute a given command with the given arguments */
+    public execCommand(command: string, args: string[]): string{
+        return this.commands[command].execute(args);
+    }
+
 }
