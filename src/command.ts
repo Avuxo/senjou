@@ -1,5 +1,8 @@
 import * as discord from 'discord.js';
 
+// loaded to get owner ID
+const config = require('../config.json');
+
 // predefined commands
 const predefinedCommands = ["desc"];
 
@@ -14,6 +17,7 @@ export class Command{
     private cooldown: number;
     private needsArgs: boolean;
     private roleRequired: string
+    private mustBeOwner: boolean;
     
     /*
       Options
@@ -21,6 +25,7 @@ export class Command{
       |-cooldown: number // amount of cooldown before it can be executed
       |-needsArgs: bool // does the command require arguments?
       |-roleRequired: string // the role required to execute it
+      |-mustBeOwner: bool // (optional) does the user need to be bot owner?
      */
     constructor(label, func, options){
         this.label = label;
@@ -30,9 +35,20 @@ export class Command{
         this.needsArgs = options.needsArgs;
         this.func = func;
         this.roleRequired = options.roleRequired || undefined;
+        this.mustBeOwner = options.mustBeOwner || false;
     }
 
     private permissionCheck(msg): boolean{
+        
+        // must the user be owner?
+        if(this.mustBeOwner){
+            // is the user owner?
+            if(msg.author.id == config.owner){
+                return true;
+            }
+            return false;
+        }
+        
         // if there are no perms required, just return true
         if(this.roleRequired == undefined)
             return true;

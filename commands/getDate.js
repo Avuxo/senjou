@@ -6,7 +6,7 @@
 
 module.exports = {
     "label": "getDate",
-    "func": () => {
+    "func": (args) => {
         let date = new Date();
 
         // get the current date (d/m/y)

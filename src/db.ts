@@ -21,13 +21,13 @@ export class DB{
         // create the user schema
         this.userSchema = new mongoose.Schema(
             {
-                usedID: 'string'
+                _id: 'string'
             });
 
         // create the guild schema
         this.guildSchema = new mongoose.Schema(
             {
-                guildID: 'string'
+                _id: 'string'
             });
 
         // create the models
@@ -43,7 +43,7 @@ export class DB{
             if(!guild){
                 // create using the predefined schema
                 guildModel.create({
-                    guildID: guild.id
+                    _id: guild.id
                 }, (err) => { // error creating database
                     console.log(err);
                 });
@@ -52,11 +52,11 @@ export class DB{
     }
 
     /*delete a given guild if it exists*/
-    public deleteGuild(guildID): void{
-        this.guildModel.findById(guildID, (err, guild) => {
+    public deleteGuild(guild): void{
+        this.guildModel.findById(guild.id, (err, guild) => {
             if(err) { console.log(err); }
             if(guild){ // check for guild and remove
-                guildModel.remove({guildID: guildID}, (err) => {
+                guildModel.remove({_id: guild.id}, (err) => {
                     if(err) { console.log(err); }
                 });
             }
@@ -72,7 +72,7 @@ export class DB{
             if(!user){
                 // create using the predefined schema
                 userModel.create({
-                    userID: user.id
+                    _id: user.id
                 }, (err) => { // error creating database
                     console.log(err);
                 });
@@ -81,11 +81,11 @@ export class DB{
     }
 
     /*check if a given user exists and if so, delete them*/
-    public deleteUser(userID): void{
-        this.userModel.findById(userID, (err, user) => {
+    public deleteUser(user): void{
+        this.userModel.findById(user.id, (err, user) => {
             if(err) { console.log(err); }
             if(user){
-                userModel.remove({userID: userID}, (err) => {
+                userModel.remove({_id: userID}, (err) => {
                     if(err) { console.log(err); }
                 });
             }

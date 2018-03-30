@@ -7,7 +7,7 @@
 
 module.exports = {
     "label": "ping",
-    "func": () => { return "pong"; },
+    "func": (args) => { return "pong"; },
     "options": {
         "description": "Simple command returns 'pong'",
         "cooldown": 0,

@@ -73,6 +73,17 @@ export class Senjou{
                 msg.reply(response);
             }
         });
+
+        // join new guild
+        this.client.on("guildCreate", (guild) => {
+            this.db.addGuild(guild);
+        });
+
+        // removed from guild
+        this.client.on("guildDelete", (guild) => {
+            this.db.deleteGuild(guild);
+        });
+        
     }
 
     // get the time & date at invocation
