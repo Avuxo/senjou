@@ -4,6 +4,7 @@ import * as glob from 'glob';
 
 import { DB } from './db';
 import { CommandHandler } from './commandhandler';
+import { Guild } from './guild';
 
 /*
   Senjou
@@ -17,6 +18,7 @@ export class Senjou{
     private client: Client;
     private database: DB;
     private commandHandler: CommandHandler;
+    private guilds: Guild[];
     
     constructor(config){
         this.token = config.token;
@@ -29,6 +31,8 @@ export class Senjou{
         
         this.commandHandler = new CommandHandler();
 
+        this.guilds = [];
+        
         this.loadCommands();
     }
 
@@ -55,6 +59,9 @@ export class Senjou{
     public start(): void{
         // start the bot
         this.client.on("ready", () => {
+            // initialize the guild objects for the bot instance
+            this.initGuilds();
+            
             // print startup time
             console.log("Bot started @ " + this.getTime());
             // set the 'playing' status
@@ -67,9 +74,7 @@ export class Senjou{
             if(msg.content.startsWith(this.prefix)){
                 let command = msg.content.substr(1).split(" ");
                 let args = command.slice(1);
-
                 let response = this.commandHandler.execCommand(command[0], args);
-
                 msg.reply(response);
             }
         });
@@ -83,9 +88,15 @@ export class Senjou{
         this.client.on("guildDelete", (guild) => {
             this.db.deleteGuild(guild);
         });
+
         
     }
 
+    // initialize the guilds
+    private initGuilds(): void{
+        
+    }
+    
     // get the time & date at invocation
     public getTime(): string{
         let date: Date = new Date();
