@@ -26,7 +26,10 @@ export class CommandHandler{
 
     /* execute a given command with the given arguments */
     public execCommand(command: string, args): string{
-        return this.commands[command].execute(args);
+        // return undefined if the command is udnefined
+        // return the result otherwise
+        let cmd = this.commands[command];
+        return (cmd == undefined) ? undefined : cmd.execute(args);
     }
 
 }

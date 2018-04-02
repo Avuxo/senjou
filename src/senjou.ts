@@ -78,7 +78,7 @@ export class Senjou{
             if(msg.content.startsWith(this.prefix)){
                 let command = msg.content.substr(1).split(" ");
                 let args = command.slice(1);
-
+                
                 // find the guild object where the ID matches.
                 let guild = this.guilds.find(g => g.id == msg.guild.id);
                 if(guild != undefined && guild.checkCooldown(command, 10000)){

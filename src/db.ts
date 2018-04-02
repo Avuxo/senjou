@@ -41,31 +41,23 @@ export class DB{
 
     /*Check if a guild exists and if it doesn't, create it*/
     public addGuild(guild): void{
-        this.guildModel.find({guild_id: guild.id}, (err, res) => {
+        this.guildModel.findOne({guild_id: guild.id}, (err, res) => {
             if(err) { console.log(err); }
             // server does not previously exist
             if(!res){
-                // create using the predefined schema
-                this.guildModel.update({
+                // create a new guild object
+                let g = new this.guildModel({
                     guild_id: guild.id,
                     name: guild.name
-                }, (err) => { // error creating database
-                    console.log('fu');
-                    console.log(err);
                 });
-            }
-        });
-    }
-
-    /*delete a given guild if it exists*/
-    public deleteGuild(guild): void{
-        this.guildModel.find(guild.id, (err, guild) => {
-            if(err) { console.log(err); }
-            if(guild){ // check for guild and remove
-                guildModel.remove({_id: guild.id}, (err) => {
-                    if(err) { console.log(err); }
+                
+                //save the model to the database
+                g.save((err) => {
+                    if(err){ console.log(err); }
+                    else { console.log('saved guild'); }
                 });
-            }
+                
+            } else { console.log(res); }
         });
     }
 
@@ -93,7 +85,7 @@ export class DB{
             // server does not previously exist
             if(!user){
                 // create using the predefined schema
-                userModel.create({
+                this.userModel.create({
                     _id: user.id
                 }, (err) => { // error creating database
                     console.log(err);
@@ -107,7 +99,7 @@ export class DB{
         this.userModel.findById(user.id, (err, user) => {
             if(err) { console.log(err); }
             if(user){
-                userModel.remove({_id: userID}, (err) => {
+                this.userModel.remove({_id: userID}, (err) => {
                     if(err) { console.log(err); }
                 });
             }
