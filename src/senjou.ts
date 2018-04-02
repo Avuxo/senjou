@@ -61,11 +61,15 @@ export class Senjou{
         this.client.on("ready", () => {
             // initialize the guild objects for the bot instance
             this.initGuilds();
+
+
+            
+            // set the 'playing' status
+            this.client.user.setPresence({game: {name: 'with Ben Whom', type: 0}});
+
             
             // print startup time
             console.log("Bot started @ " + this.getTime());
-            // set the 'playing' status
-            this.client.user.setPresence({game: {name: 'with Ben Whom', type: 0}});
         
         });
 
@@ -81,12 +85,12 @@ export class Senjou{
 
         // join new guild
         this.client.on("guildCreate", (guild) => {
-            this.db.addGuild(guild);
+            this.database.addGuild(guild);
         });
 
         // removed from guild
         this.client.on("guildDelete", (guild) => {
-            this.db.deleteGuild(guild);
+            this.database.deleteGuild(guild);
         });
 
         
@@ -94,7 +98,11 @@ export class Senjou{
 
     // initialize the guilds
     private initGuilds(): void{
-        
+        this.database.getAllGuilds((guilds) => {
+            guilds.forEach((guild) => {
+                this.guilds.push(new Guild(guild.guild_id, guild.name));
+            })
+        });
     }
     
     // get the time & date at invocation

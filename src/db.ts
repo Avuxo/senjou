@@ -16,35 +16,41 @@ export class DB{
     
     constructor(){
         // connect to the database
-        mongoose.connect('mongodb://localhost:27017');
+        mongoose.connect('mongodb://127.0.0.1:27017/test', (err) => {
+            if(err) { console.log(err); }
+        });
 
         // create the user schema
         this.userSchema = new mongoose.Schema(
             {
-                _id: 'string'
+                user_id: String,
+                name: String
             });
 
         // create the guild schema
         this.guildSchema = new mongoose.Schema(
             {
-                _id: 'string'
+                guild_id: String,
+                name: String
             });
 
         // create the models
-        this.userModel = mongoose.model('User', this.userSchema);
-        this.guildModel = mongoose.model('Guild', this.guildSchema);
+        this.userModel = mongoose.model('User', this.userSchema, 'test');
+        this.guildModel = mongoose.model('Guild', this.guildSchema, 'test');
     }
 
     /*Check if a guild exists and if it doesn't, create it*/
     public addGuild(guild): void{
-        this.guildModel.findById(guild.id, (err, guild) => {
+        this.guildModel.find({guild_id: guild.id}, (err, res) => {
             if(err) { console.log(err); }
             // server does not previously exist
-            if(!guild){
+            if(!res){
                 // create using the predefined schema
-                guildModel.create({
-                    _id: guild.id
+                this.guildModel.update({
+                    guild_id: guild.id,
+                    name: guild.name
                 }, (err) => { // error creating database
+                    console.log('fu');
                     console.log(err);
                 });
             }
@@ -53,7 +59,7 @@ export class DB{
 
     /*delete a given guild if it exists*/
     public deleteGuild(guild): void{
-        this.guildModel.findById(guild.id, (err, guild) => {
+        this.guildModel.find(guild.id, (err, guild) => {
             if(err) { console.log(err); }
             if(guild){ // check for guild and remove
                 guildModel.remove({_id: guild.id}, (err) => {
@@ -63,6 +69,22 @@ export class DB{
         });
     }
 
+    /*get a guild with a given ID*/
+    public getGuild(guild){
+        this.guildModel.find({guild_id: guild.id}, (err, res) => {
+            if(err) { console.log(err); }
+            if(res) { return res; }
+        });
+    }
+
+    /*get all guilds in the database*/
+    public getAllGuilds(callback){
+        this.guildModel.find({}, (err, guilds) => {
+            if(err) { console.log(err) }
+            if(guilds) { callback(guilds); }
+        });
+    }
+    
     /*add a user if they do not yet exist*/
     public addUser(user): void{
         this.userModel.findById(user.id, (err, user) => {
