@@ -25,7 +25,7 @@ export class CommandHandler{
     }
 
     /* execute a given command with the given arguments */
-    public execCommand(command: string, args: string[]): string{
+    public execCommand(command: string, args): string{
         return this.commands[command].execute(args);
     }
 
