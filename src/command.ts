@@ -30,7 +30,7 @@ export class Command{
     constructor(label, func, options){
         this.label = label;
         this.func = func;
-        this.description = options.descriptions;
+        this.description = options.description;
         this.cooldown = options.cooldown || 0;
         this.needsArgs = options.needsArgs;
         this.func = func;

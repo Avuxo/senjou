@@ -32,4 +32,10 @@ export class CommandHandler{
         return (cmd == undefined) ? undefined : cmd.execute(args);
     }
 
+    /* get a description for a given command */
+    public getDescription(command: string): string{
+        let cmd = this.commands[command];
+        return (cmd == undefined) ? undefined : cmd.getDescription();
+    }
+
 }

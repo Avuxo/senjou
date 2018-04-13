@@ -24,7 +24,7 @@ export class DB{
         this.userSchema = new mongoose.Schema(
             {
                 user_id: String,
-                name: String
+                name: String,
             });
 
         // create the guild schema
@@ -62,47 +62,56 @@ export class DB{
     }
 
     /*get a guild with a given ID*/
-    public getGuild(guild){
+    public getGuild(guild, callback){
         this.guildModel.find({guild_id: guild.id}, (err, res) => {
             if(err) { console.log(err); }
-            if(res) { return res; }
+            if(res) { callback(res); }
         });
     }
 
     /*get all guilds in the database*/
     public getAllGuilds(callback){
-        this.guildModel.find({}, (err, guilds) => {
+        this.guildModel.find({}, (err, res) => {
             if(err) { console.log(err) }
-            if(guilds) { callback(guilds); }
+            if(res) { callback(res); }
         });
     }
-    
-    /*add a user if they do not yet exist*/
+
+
+    /*Check if a guild exists and if it doesn't, create it*/
     public addUser(user): void{
-        this.userModel.findById(user.id, (err, user) => {
+        this.userModel.findOne({user_id: user.id}, (err, res) => {
             if(err) { console.log(err); }
-
             // server does not previously exist
-            if(!user){
-                // create using the predefined schema
-                this.userModel.create({
-                    _id: user.id
-                }, (err) => { // error creating database
-                    console.log(err);
+            if(!res){
+                // create a new guild object
+                let u = new this.userModel({
+                    user_id: user.id,
+                    name: user.name
                 });
-            }
+                
+                //save the model to the database
+                u.save((err) => {
+                    if(err){ console.log(err); }
+                });
+                
+            } else { console.log(res); }
         });
     }
 
-    /*check if a given user exists and if so, delete them*/
-    public deleteUser(user): void{
-        this.userModel.findById(user.id, (err, user) => {
+    /*get a guild with a given ID*/
+    public getUser(user, callback){
+        this.userModel.find({user_id: user.id}, (err, res) => {
             if(err) { console.log(err); }
-            if(user){
-                this.userModel.remove({_id: userID}, (err) => {
-                    if(err) { console.log(err); }
-                });
-            }
+            if(res) { callback(res); }
+        });
+    }
+
+    /*get all guilds in the database*/
+    public getAllUsers(callback){
+        this.userModel.find({}, (err, res) => {
+            if(err) { console.log(err) }
+            if(res) { callback(users); }
         });
     }
 

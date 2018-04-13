@@ -15,6 +15,7 @@ import { Guild } from './guild';
 export class Senjou{
     private token: string;
     private prefix: string;
+    private presence: string;
     private client: Client;
     private database: DB;
     private commandHandler: CommandHandler;
@@ -23,6 +24,7 @@ export class Senjou{
     constructor(config){
         this.token = config.token;
         this.prefix = config.prefix;
+        this.presence = config.presence;
 
         this.database = new DB();
 
@@ -65,7 +67,7 @@ export class Senjou{
 
             
             // set the 'playing' status
-            this.client.user.setPresence({game: {name: 'with Ben Whom', type: 0}});
+            this.client.user.setPresence({game: {name: this.presence, type: 0}});
 
             
             // print startup time
@@ -75,16 +77,23 @@ export class Senjou{
 
         // message in view
         this.client.on("message", (msg) => {
-            if(msg.content.startsWith(this.prefix)){
+            // get description
+            if(msg.content.startsWith(this.prefix + "desc")){
+                let command = msg.content.substr(1).split(" ").slice(1);
+                let response = this.commandHandler.getDescription(command);
+                if(response != undefined) { msg.channel.send(response); }
+            // get command
+            } else if(msg.content.startsWith(this.prefix)){
                 let command = msg.content.substr(1).split(" ");
                 let args = command.slice(1);
+                args.db = this.database;
                 
                 // find the guild object where the ID matches.
                 let guild = this.guilds.find(g => g.id == msg.guild.id);
-                if(guild != undefined && guild.checkCooldown(command, 10000)){
+                if(guild != undefined && guild.checkCooldown(command, 1000)){
                     let response = this.commandHandler.execCommand(command[0], args);
                     // make sure response is valid.
-                    if(response != undefined) { msg.reply(response); }
+                    if(response != undefined) { msg.channel.send(response); }
                 }
             }
         });
